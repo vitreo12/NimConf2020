@@ -1,0 +1,18 @@
+struct MyDelay:
+    delay Delay
+    prev_value
+
+def newMyDelay():
+    return MyDelay(Delay(samplerate), 0.0)
+
+def process(mydelay MyDelay, input, dt, fb, damping, mix):
+    delay_read = mydelay.delay.read(dt * samplerate)
+    output = (input * (mix - 1)) + (delay_read * mix)
+    
+    feedback_value = delay_read * fb
+    delay_write = input + feedback_value
+    delay_write = ((1.0 - damping) * delay_write) + (damping * mydelay.prev_value)
+   
+    mydelay.delay.write(delay_write)
+    mydelay.prev_value = delay_write
+    return output

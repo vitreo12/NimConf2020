@@ -1,0 +1,14 @@
+require "MyDelay.omni"
+
+ins 5:
+    "input"
+    "delay_time" {0.5, 0, 1}
+    "feedback" {0.5, 0, 0.98}
+    "damping" {0.5, 0, 0.98}
+    "mix" {0.5, 0, 1}
+
+init:
+    mydelay = newMyDelay()
+
+sample:
+    out1 = mydelay.process(in1, in2, in3, in4, in5)

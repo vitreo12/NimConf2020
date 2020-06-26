@@ -1,0 +1,27 @@
+require "MyDelay.omni"
+
+struct MyDelays:
+    delays      Data[MyDelay]
+    delay_times Buffer
+    feedbacks   Buffer
+    dampings    Buffer
+    volumes     Buffer
+
+def newMyDelays(n):
+    delays = Data[MyDelay](n)
+    for delay in delays:
+        delay = newMyDelay()
+
+    delay_times = Buffer(2)
+    feedbacks   = Buffer(3)
+    dampings    = Buffer(4)
+    volumes     = Buffer(5)
+
+    return MyDelays(delays, delay_times, feedbacks, dampings, volumes)
+
+def process(mydelays MyDelays, input):
+    out_value = 0
+    for i, delay in mydelays.delays:
+        out_value  = out_value  + (delay.process(input, mydelays.delay_times[i], mydelays.feedbacks[i], mydelays.dampings[i], 1.0) * mydelays.volumes[i])
+    
+    return out_value / mydelays.delays.len()
